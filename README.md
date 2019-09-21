@@ -2,8 +2,8 @@
 
 ## Getting started
 - Install dependencies: `npm run build`
-- Fill in environment variables in the `client` folder:
-- `cp .env.sample .env`
+- Fill in environment variables:
+- `cp .env.sample .env` and then enter your api keys appropriately
 
 ## Scripts
 - Start the app in development mode : `npm run dev`
