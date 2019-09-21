@@ -1,32 +1,62 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
+import SearchBar from './components/SearchBar';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-const URL =
-  'https://f447a5d5-06b6-4489-9695-04ef87e544f4:HG44e1OJo4@twcservice.mybluemix.net/api/weather/v1/geocode/33.40/-83.42/observations.json';
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      zipcode: 0,
+      data: {}
+    };
+  }
 
-async function getWeather() {
-  try {
-    return await axios({
-      method: 'get',
-      url: URL,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      params: {
-        language: 'en-US'
-      }
-    });
-  } catch (err) {
-    console.log(err);
+  getZip = async zip => {
+    this.setState({ zipcode: zip });
+    try {
+      this.setState({ data: { waiting: true } });
+      const { data } = await axios({
+        method: 'get',
+        url: `http://localhost:8080/ibmCloud/forcast/${zip}`
+      });
+      this.setState({ data: data });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  displayData = () => {
+    if (this.state.data.metadata) {
+      return (
+        <div>
+          <h5>Forcast for zipcode: {this.state.zipcode}</h5>
+          <p>Wind Speed: {this.state.data.observation.wspd}</p>
+          <p>Precipitation: {this.state.data.observation.precip_total}</p>
+          <p>Wind Direction: {this.state.data.observation.wdir}</p>
+        </div>
+      );
+    } else if (this.state.data.waiting) {
+      return <div>Awaiting results...</div>;
+    } else {
+      return <div>No data to currently display</div>;
+    }
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <h1>Weather guardian unleashed!</h1>
+        <SearchBar getZip={this.getZip}></SearchBar>
+        {this.displayData()}
+      </div>
+    );
   }
 }
 
-export default function App() {
-  getWeather();
-  return (
-    <div className="App">
-      <h1>Weather guardian unleashed!</h1>
-    </div>
-  );
-}
+App.propTypes = {
+  zipcode: PropTypes.number,
+  data: PropTypes.object
+};
