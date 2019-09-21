@@ -3,6 +3,12 @@
   background-color: skyblue;
 }
 
+.App img {
+  margin: 5px;
+  height: 150px;
+  width: 200px;
+}
+
 .App h1 {
   font-weight: 900;
   color: brown;

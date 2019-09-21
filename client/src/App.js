@@ -50,7 +50,8 @@ export default class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>Weather guardian unleashed!</h1>
+        <img src={require('./guardian.svg')} alt="guardian logo"></img>
+        <h1>Welcome To Weather Guardian!</h1>
         <SearchBar getZip={this.getZip}></SearchBar>
         {this.displayData()}
       </div>
