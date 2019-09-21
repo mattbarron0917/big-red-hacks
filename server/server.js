@@ -32,4 +32,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Have the app listen
-app.listen(port, () => console.log(`Server up! Listening on  https://localhost:${port}`));
+app.listen(port, () => console.log(`Server up! Listening on  http://localhost:${port}`));
