@@ -10,7 +10,7 @@
     "format": "prettier --config .prettierrc --write client/src/**/*.js*  server/**/*.js*",
     "start": "node server/server.js",
     "build": "yarn install && cd client && yarn install && cd ..",
-    "dev": "concurrently npm start --prefix client && nodemon server/server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client": "npm start --prefix client",
     "server": "nodemon server/server.js"
   },
