@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './SearchBar.css';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 
@@ -28,9 +29,11 @@ export default class SearchBar extends Component {
           type="text"
           name="zipcode"
         ></input>
-        <Button color="primary" onClick={this.sendZip}>
-          Search
-        </Button>
+        <div className="btn-search">
+          <Button color="primary" size="lg" onClick={this.sendZip}>
+            Search
+          </Button>
+        </div>
       </div>
     );
   }

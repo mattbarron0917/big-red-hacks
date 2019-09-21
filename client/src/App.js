@@ -15,15 +15,15 @@ export default class App extends Component {
   }
 
   getZip = async zip => {
-    this.setState({ zipcode: zip });
     try {
       this.setState({ data: { waiting: true } });
       const { data } = await axios({
         method: 'get',
         url: `http://localhost:8080/ibmCloud/forcast/${zip}`
       });
-      this.setState({ data: data });
+      this.setState({ zipcode: zip, data: data });
     } catch (err) {
+      this.setState({ data: { error: true } });
       console.log(err);
     }
   };
@@ -31,7 +31,7 @@ export default class App extends Component {
   displayData = () => {
     if (this.state.data.metadata) {
       return (
-        <div>
+        <div className="forcast-text-box">
           <h5>Forcast for zipcode: {this.state.zipcode}</h5>
           <p>Wind Speed: {this.state.data.observation.wspd}</p>
           <p>Precipitation: {this.state.data.observation.precip_total}</p>
@@ -40,6 +40,8 @@ export default class App extends Component {
       );
     } else if (this.state.data.waiting) {
       return <div>Awaiting results...</div>;
+    } else if (this.state.data.error) {
+      return <div>Zip code could not be found</div>;
     } else {
       return <div>No data to currently display</div>;
     }

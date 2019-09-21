@@ -1,22 +1,17 @@
 .App {
   text-align: center;
+  background-color: skyblue;
 }
 
-.App-logo {
-  height: 40vmin;
+.App h1 {
+  font-weight: 900;
+  color: brown;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.forcast-text-box {
+  font-size: 30px;
 }
 
-.App-link {
-  color: #09d3ac;
+.forcast-text-box h5 {
+  font-size: 130%;
 }
