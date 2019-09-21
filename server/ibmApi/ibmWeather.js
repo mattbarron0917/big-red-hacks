@@ -5,7 +5,7 @@ const URL =
 
 async function getWeather() {
   try {
-    const response = await axios({
+    const { data } = await axios({
       method: 'get',
       url: URL,
       headers: {
@@ -15,10 +15,11 @@ async function getWeather() {
         language: 'en-US'
       }
     });
-    console.log(response);
+
+    return data;
   } catch (err) {
     console.log(err);
   }
 }
 
-getWeather();
+module.exports = getWeather;

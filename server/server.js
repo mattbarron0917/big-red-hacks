@@ -1,8 +1,9 @@
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-const { config } = require('dotenv');
 const path = require('path');
+const { ibmController, googleController } = require('./routes');
+const { config } = require('dotenv');
 
 config();
 
@@ -20,6 +21,12 @@ app.use(logger('dev'));
 // Use bodyParser middleware to parse requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+/**
+ *  ROUTES
+ */
+app.use('/ibmClound', ibmController);
+app.use('/googleCloud', googleController);
 
 // For deployment ONLY
 // send the static build folder created by the react app through the server
