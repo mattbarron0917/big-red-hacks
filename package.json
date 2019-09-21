@@ -1,0 +1,33 @@
+{
+  "name": "big-red-hacks2019",
+  "version": "1.0.0",
+  "description": "Hackathon project\"",
+  "main": "server.js",
+  "repository": "git@github.com:marinov98/big-red-hacks2019.git",
+  "author": "marinov98 <Marin.Marinov38@myhunter.cuny.edu>",
+  "license": "MIT",
+  "scripts": {
+    "format": "prettier --config .prettierrc --write client/src/**/*.js*  server/**/*.js*",
+    "start": "node server/server.js",
+    "build": "yarn install && cd client && yarn install && cd ..",
+    "dev": "concurrently npm start --prefix client && nodemon server/server.js",
+    "client": "npm start --prefix client",
+    "server": "nodemon server/server.js"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "bootstrap": "^4.3.1",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "jquery": "^3.4.1",
+    "morgan": "^1.9.1",
+    "popper.js": "^1.15.0",
+    "reactstrap": "^8.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.2",
+    "nodemon": "^1.19.2",
+    "prettier": "^1.18.2"
+  }
+}
