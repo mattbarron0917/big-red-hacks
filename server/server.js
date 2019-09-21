@@ -22,10 +22,14 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.get('/', function(req, res, next) {
+  res.send('Backend currently being worked on but is listening');
+});
+
 /**
  *  ROUTES
  */
-app.use('/ibmClound', ibmController);
+app.use('/ibmCloud', ibmController);
 app.use('/googleCloud', googleController);
 
 // For deployment ONLY
