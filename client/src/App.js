@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import SearchBar from './components/SearchBar';
+import { Alert } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -10,18 +11,36 @@ export default class App extends Component {
     super(props);
     this.state = {
       zipcode: 0,
-      data: {}
+      data: {},
+      fireData: [],
+      searchLat: 0,
+      searchLon: 0
     };
   }
 
   getZip = async zip => {
     try {
       this.setState({ data: { waiting: true } });
+
+      // Forcast data
       const { data } = await axios({
         method: 'get',
         url: `http://localhost:8080/ibmCloud/forcast/${zip}`
       });
-      this.setState({ zipcode: zip, data: data });
+
+      this.setState({
+        zipcode: zip,
+        data: data,
+        searchLat: data.metadata.latitude,
+        searchLon: data.metadata.longitude
+      });
+
+      // Fire data
+      const fireResponse = await axios({
+        method: 'get',
+        url: `http://localhost:8080/ibmCloud/firedata/${zip}`
+      });
+      this.setState({ fireData: fireResponse.data });
     } catch (err) {
       this.setState({ data: { error: true } });
       console.log(err);
@@ -47,6 +66,59 @@ export default class App extends Component {
     }
   };
 
+  analyzeFireData = () => {
+    const warnArr = [];
+
+    if (this.state.fireData.length !== 0 && this.state.data.observation) {
+      for (const coordinate of this.state.fireData) {
+        if (
+          coordinate.lat - this.state.searchLat > 0 &&
+          coordinate.lon - this.state.searchLon > 0
+        ) {
+          if (this.state.data.observation.wdir >= 0 && this.state.data.observation.wdir <= 90) {
+            warnArr.push(coordinate);
+          }
+        } else if (
+          coordinate.lat - this.state.searchLat < 0 &&
+          coordinate.lon - this.state.searchLon > 0
+        ) {
+          if (this.state.data.observation.wdir >= 90 && this.state.data.observation.wdir <= 180) {
+            warnArr.push(coordinate);
+          }
+        } else if (
+          coordinate.lat - this.state.searchLat < 0 &&
+          coordinate.lon - this.state.searchLon < 0
+        ) {
+          if (this.state.data.observation.wdir >= 180 && this.state.data.observation.wdir <= 270) {
+            warnArr.push(coordinate);
+          }
+        } else if (
+          coordinate.lat - this.state.searchLat > 0 &&
+          coordinate.lon - this.state.searchLon < 0
+        ) {
+          if (this.state.data.observation.wdir >= 270 && this.state.data.observation.wdir <= 360) {
+            warnArr.push(coordinate);
+          }
+        }
+      }
+
+      return warnArr;
+    }
+  };
+
+  displayWarnings = () => {
+    const warnings = this.analyzeFireData();
+    if (warnings && warnings.length > 0) {
+      return (
+        <div>
+          <Alert color="danger">WARNING! Fire spotted within 10 miles be aware</Alert>
+        </div>
+      );
+    } else {
+      return <div>No safety hazards found</div>;
+    }
+  };
+
   render() {
     return (
       <div className="App">
@@ -54,6 +126,7 @@ export default class App extends Component {
         <h1>Welcome To Weather Guardian!</h1>
         <SearchBar getZip={this.getZip}></SearchBar>
         {this.displayData()}
+        {this.displayWarnings()}
       </div>
     );
   }
@@ -61,5 +134,6 @@ export default class App extends Component {
 
 App.propTypes = {
   zipcode: PropTypes.number,
-  data: PropTypes.object
+  data: PropTypes.object,
+  fireData: PropTypes.array
 };

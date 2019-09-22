@@ -1,3 +1,8 @@
+html {
+  background-color: skyblue;
+
+}
+
 .App {
   text-align: center;
   background-color: skyblue;
@@ -16,8 +21,15 @@
 
 .forcast-text-box {
   font-size: 30px;
+  background-color: lightcoral;
+  border: 2px solid red;
+  margin-left:560px;
+  margin-right: 560px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .forcast-text-box h5 {
   font-size: 130%;
+  color: white;
 }
